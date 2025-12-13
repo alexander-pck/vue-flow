@@ -42,6 +42,11 @@ const EdgeWrapper = defineComponent({
       edgesUpdatable,
       edgesFocusable,
       hooks,
+      connectionPosition,
+      connectionEndHandle,
+      connectionStartHandle,
+      connectionEdgeType,
+      viewport,
     } = useVueFlow()
 
     const edge = computed(() => findEdge(props.id)!)
@@ -114,6 +119,7 @@ const EdgeWrapper = defineComponent({
       edgeUpdaterType,
       onEdgeUpdate,
       onEdgeUpdateEnd,
+      connectionEdgeType: toRef(() => edge.value.type || null),
     })
 
     return () => {
@@ -168,11 +174,36 @@ const EdgeWrapper = defineComponent({
       const { x: sourceX, y: sourceY } = getHandlePosition(sourceNode, sourceHandle, sourcePosition)
       const { x: targetX, y: targetY } = getHandlePosition(targetNode, targetHandle, targetPosition)
 
+      // Check if this edge is being updated and should use dynamic coordinates
+      const isThisEdgeUpdating =
+        updating.value && connectionStartHandle.value && connectionEdgeType.value && connectionEdgeType.value === edge.value.type
+
+      let finalSourceX = sourceX
+      let finalSourceY = sourceY
+      let finalTargetX = targetX
+      let finalTargetY = targetY
+
+      // When updating this edge, use connection position for the appropriate end
+      if (isThisEdgeUpdating && connectionPosition.value && !Number.isNaN(connectionPosition.value.x)) {
+        const dynamicX = (connectionPosition.value.x - viewport.value.x) / viewport.value.zoom
+        const dynamicY = (connectionPosition.value.y - viewport.value.y) / viewport.value.zoom
+
+        // If updating the source, override source coordinates
+        if (edgeUpdaterType.value === 'source') {
+          finalSourceX = dynamicX
+          finalSourceY = dynamicY
+        } else {
+          // If updating the target, override target coordinates
+          finalTargetX = dynamicX
+          finalTargetY = dynamicY
+        }
+      }
+
       // todo: let's avoid writing these here (in v2 we want to remove all of these self-managed refs)
-      edge.value.sourceX = sourceX
-      edge.value.sourceY = sourceY
-      edge.value.targetX = targetX
-      edge.value.targetY = targetY
+      edge.value.sourceX = finalSourceX
+      edge.value.sourceY = finalSourceY
+      edge.value.targetX = finalTargetX
+      edge.value.targetY = finalTargetY
 
       return h(
         'g',
@@ -210,7 +241,9 @@ const EdgeWrapper = defineComponent({
           'onKeyDown': isFocusable.value ? onKeyDown : undefined,
         },
         [
-          updating.value
+          // Only hide edge when updating if no edge type is specified for connection
+          // This allows the ConnectionLine to be shown as fallback
+          updating.value && !isThisEdgeUpdating
             ? null
             : h(edgeCmp.value === false ? getEdgeTypes.value.default : (edgeCmp.value as any), {
                 id: props.id,
@@ -235,10 +268,10 @@ const EdgeWrapper = defineComponent({
                 markerEnd: `url('#${getMarkerId(edge.value.markerEnd, vueFlowId)}')`,
                 sourcePosition,
                 targetPosition,
-                sourceX,
-                sourceY,
-                targetX,
-                targetY,
+                sourceX: finalSourceX,
+                sourceY: finalSourceY,
+                targetX: finalTargetX,
+                targetY: finalTargetY,
                 sourceHandleId: edge.value.sourceHandle,
                 targetHandleId: edge.value.targetHandle,
                 interactionWidth: edge.value.interactionWidth,

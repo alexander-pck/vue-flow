@@ -29,6 +29,7 @@ export interface UseHandleProps {
   edgeUpdaterType?: MaybeRefOrGetter<HandleType>
   onEdgeUpdate?: (event: MouseTouchEvent, connection: Connection) => void
   onEdgeUpdateEnd?: (event: MouseTouchEvent) => void
+  connectionEdgeType?: MaybeRefOrGetter<string | null>
 }
 
 function alwaysValid() {
@@ -50,6 +51,7 @@ export function useHandle({
   edgeUpdaterType,
   onEdgeUpdate,
   onEdgeUpdateEnd,
+  connectionEdgeType,
 }: UseHandleProps) {
   const {
     id: flowId,
@@ -169,6 +171,8 @@ export function useHandle({
           x: x - containerBounds.left,
           y: y - containerBounds.top,
         },
+        false,
+        toValue(connectionEdgeType) ?? null,
       )
 
       emits.connectStart({ event, nodeId: toValue(nodeId), handleId: toValue(handleId), handleType })
