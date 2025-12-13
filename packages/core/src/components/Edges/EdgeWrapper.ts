@@ -175,8 +175,7 @@ const EdgeWrapper = defineComponent({
       const { x: targetX, y: targetY } = getHandlePosition(targetNode, targetHandle, targetPosition)
 
       // Check if this edge is being updated and should use dynamic coordinates
-      const isThisEdgeUpdating =
-        updating.value && connectionStartHandle.value && connectionEdgeType.value && connectionEdgeType.value === edge.value.type
+      const isThisEdgeUpdating = updating.value && connectionEdgeType.value !== null
 
       let finalSourceX = sourceX
       let finalSourceY = sourceY
@@ -278,7 +277,8 @@ const EdgeWrapper = defineComponent({
                 ...pathOptions,
               }),
           [
-            isUpdatable.value === 'source' || isUpdatable.value === true
+            // Don't show edge updater anchors when the edge is being updated
+            !updating.value && (isUpdatable.value === 'source' || isUpdatable.value === true)
               ? [
                   h(
                     'g',
@@ -289,8 +289,8 @@ const EdgeWrapper = defineComponent({
                     },
                     h(EdgeAnchor, {
                       'position': sourcePosition,
-                      'centerX': sourceX,
-                      'centerY': sourceY,
+                      'centerX': finalSourceX,
+                      'centerY': finalSourceY,
                       'radius': edgeUpdaterRadius.value,
                       'type': 'source',
                       'data-type': 'source',
@@ -298,7 +298,7 @@ const EdgeWrapper = defineComponent({
                   ),
                 ]
               : null,
-            isUpdatable.value === 'target' || isUpdatable.value === true
+            !updating.value && (isUpdatable.value === 'target' || isUpdatable.value === true)
               ? [
                   h(
                     'g',
@@ -309,8 +309,8 @@ const EdgeWrapper = defineComponent({
                     },
                     h(EdgeAnchor, {
                       'position': targetPosition,
-                      'centerX': targetX,
-                      'centerY': targetY,
+                      'centerX': finalTargetX,
+                      'centerY': finalTargetY,
                       'radius': edgeUpdaterRadius.value,
                       'type': 'target',
                       'data-type': 'target',
