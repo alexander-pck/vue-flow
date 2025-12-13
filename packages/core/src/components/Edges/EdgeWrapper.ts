@@ -11,6 +11,7 @@ import {
   getEdgeHandle,
   getHandlePosition,
   getMarkerId,
+  pointToRendererPoint,
 } from '../../utils'
 import EdgeAnchor from './EdgeAnchor'
 
@@ -189,14 +190,13 @@ const EdgeWrapper = defineComponent({
       // Only this edge will enter this block because only this edge has updating=true
       if (isThisEdgeUpdating && connectionPosition.value && !Number.isNaN(connectionPosition.value.x)) {
         // Transform connection position from viewport to renderer coordinates
-        const dynamicX = (connectionPosition.value.x - viewport.value.x) / viewport.value.zoom
-        const dynamicY = (connectionPosition.value.y - viewport.value.y) / viewport.value.zoom
+        const { x: dynamicX, y: dynamicY } = pointToRendererPoint(connectionPosition.value, viewport.value)
 
         // If updating the source, override source coordinates
         if (edgeUpdaterType.value === 'source') {
           finalSourceX = dynamicX
           finalSourceY = dynamicY
-        } else {
+        } else if (edgeUpdaterType.value === 'target') {
           // If updating the target, override target coordinates
           finalTargetX = dynamicX
           finalTargetY = dynamicY
