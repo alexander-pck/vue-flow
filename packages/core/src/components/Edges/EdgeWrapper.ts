@@ -48,6 +48,7 @@ const EdgeWrapper = defineComponent({
       connectionStartHandle,
       createEdgeType,
       viewport,
+      edgePreviewOnUpdate,
     } = useVueFlow()
 
     const edge = computed(() => findEdge(props.id)!)
@@ -178,8 +179,12 @@ const EdgeWrapper = defineComponent({
       // Check if this edge is being updated and should use dynamic coordinates
       // Note: updating.value is instance-specific, so only the edge being dragged will have updating=true
       // We also verify the edge type matches for additional safety and clarity
+      // Only enable preview if edgePreviewOnUpdate is true (default)
       const isThisEdgeUpdating =
-        updating.value && createEdgeType.value !== null && createEdgeType.value === (edge.value.type || 'default')
+        updating.value &&
+        edgePreviewOnUpdate.value &&
+        createEdgeType.value !== null &&
+        createEdgeType.value === (edge.value.type || 'default')
 
       let finalSourceX = sourceX
       let finalSourceY = sourceY

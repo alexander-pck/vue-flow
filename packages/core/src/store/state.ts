@@ -50,6 +50,7 @@ export function useState(): State {
     paneClickDistance: 0,
     panOnDrag: true,
     edgeUpdaterRadius: 10,
+    edgePreviewOnUpdate: true,
     onlyRenderVisibleElements: false,
     defaultViewport: { x: 0, y: 0, zoom: 1 },
 

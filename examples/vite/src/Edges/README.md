@@ -35,8 +35,27 @@ When updating an existing edge by dragging its endpoint, the edge will render wi
 
 ### Configuration
 
-The edge preview behavior is controlled by the `createEdgeType` parameter:
-- **With createEdgeType**: Shows custom edge preview during connection
-- **Without createEdgeType**: Shows default ConnectionLine (original behavior)
+The edge preview behavior is controlled by two parameters:
 
-This maintains backward compatibility with existing code while providing enhanced visual feedback for new implementations.
+#### 1. Handle-level: `createEdgeType`
+Set on individual handles to specify which edge type to use for preview:
+```vue
+<Handle :createEdgeType="'custom2'" />
+```
+
+#### 2. Global: `edgePreviewOnUpdate`
+Set on the VueFlow component to globally enable/disable edge preview during updates:
+```vue
+<VueFlow :edgePreviewOnUpdate="true">
+  <!-- your content -->
+</VueFlow>
+```
+
+**Default:** `true` (edge preview enabled)
+
+When `edgePreviewOnUpdate` is:
+- **`true`** (default): Shows custom edge preview during connection and updates
+- **`false`**: Shows ConnectionLine (original behavior)
+
+This maintains backward compatibility while providing enhanced visual feedback. You can disable the preview globally if you prefer the traditional ConnectionLine behavior, or enable it selectively per-handle by specifying `createEdgeType`.
+

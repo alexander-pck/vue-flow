@@ -106,6 +106,8 @@ export interface State extends Omit<FlowProps, 'id' | 'modelValue'> {
 
   connectOnClick: boolean
   edgeUpdaterRadius: number
+  /** Enable edge preview during updates (renders custom edge type instead of ConnectionLine) */
+  edgePreviewOnUpdate: boolean
 
   snapToGrid: boolean
   snapGrid: SnapGrid
