@@ -2,10 +2,21 @@
 import type { CSSProperties } from 'vue'
 import { Handle, Position } from '@vue-flow/core'
 
+const handleStyle: CSSProperties = { 
+  background: '#555',
+  width: '8px',
+  height: '8px',
+}
 
-const targetHandleStyle: CSSProperties = { background: '#555' }
-const sourceHandleStyleA: CSSProperties = { ...targetHandleStyle, top: '10px' }
-const sourceHandleStyleB: CSSProperties = { ...targetHandleStyle, bottom: '10px', top: 'auto' }
+const handleStyleA: CSSProperties = { 
+  ...handleStyle, 
+  top: '25%',
+}
+
+const handleStyleB: CSSProperties = { 
+  ...handleStyle, 
+  top: '75%',
+}
 </script>
 
 <script lang="ts">
@@ -15,10 +26,40 @@ export default {
 </script>
 
 <template>
-  <div>
-    Custom Color Picker Node
-  </div>
+  <div class="custom-node">
+    <div class="custom-node-body">
+      Node with Custom Edge Type
+    </div>
 
-  <Handle id="a" type="source" :position="Position.Right" :style="sourceHandleStyleA" :createEdgeType="'custom2'"/>
-  <Handle id="b" type="source" :position="Position.Right" :style="sourceHandleStyleB" :createEdgeType="'custom2'"/>
+    <!-- Handles with createEdgeType specified will create edges with that type -->
+    <Handle 
+      id="a" 
+      type="source" 
+      :position="Position.Right" 
+      :style="handleStyleA" 
+      :createEdgeType="'custom2'"
+    />
+    <Handle 
+      id="b" 
+      type="source" 
+      :position="Position.Right" 
+      :style="handleStyleB" 
+      :createEdgeType="'custom2'"
+    />
+  </div>
 </template>
+
+<style scoped>
+.custom-node {
+  padding: 10px;
+  border: 2px solid #555;
+  border-radius: 5px;
+  background: white;
+  min-width: 150px;
+}
+
+.custom-node-body {
+  text-align: center;
+  font-size: 12px;
+}
+</style>

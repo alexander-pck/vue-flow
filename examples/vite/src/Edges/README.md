@@ -1,61 +1,82 @@
-# Edge Preview Example
+# Edge Preview with Custom Edge Types
 
-This example demonstrates the edge preview feature when creating connections in Vue Flow.
+This example demonstrates how to create custom edge types that render as previews during connection creation and edge updates.
 
-## Features
+## Overview
 
-### Custom Edge Type Preview
-When dragging from a handle with `createEdgeType` specified, the edge will render with its custom type instead of showing the default ConnectionLine. This provides a better visual preview of what the final edge will look like.
+When dragging from a handle or updating an existing edge, Vue Flow can show a preview of the actual edge type instead of the default ConnectionLine. This provides better visual feedback and shows exactly what the final edge will look like.
 
-### Usage
+## Key Features
 
-In your custom node component, specify the `createEdgeType` prop on the Handle component:
+### 1. Custom Edge Type Preview
+
+Specify `createEdgeType` on handles to define which edge type to use when creating connections:
 
 ```vue
 <Handle 
-  id="a" 
   type="source" 
-  :position="Position.Right" 
+  :position="Position.Right"
   :createEdgeType="'custom2'"
 />
 ```
 
-When you drag from this handle to create a new connection, you'll see a preview of the `custom2` edge type following your cursor instead of the default connection line.
+When you drag from this handle, you'll see a preview of the `custom2` edge type following your cursor.
 
-### Components in this Example
+### 2. Edge Type Preservation
 
-- **CustomNode.vue** - A custom node with handles that specify custom edge types
-- **CustomEdge.vue** - A custom edge component with a delete button
-- **CustomEdge2.vue** - Another custom edge variant
-- **EdgesExample.vue** - The main example showing edge updates and custom types
+When a connection is created with `createEdgeType` specified, the connection object includes a `type` field. When using `addEdges()` with this connection, the edge will automatically be created with the specified type:
 
-### Edge Update Behavior
-
-When updating an existing edge by dragging its endpoint, the edge will render with dynamic coordinates following your cursor, maintaining its custom appearance throughout the drag operation.
-
-### Configuration
-
-The edge preview behavior is controlled by two parameters:
-
-#### 1. Handle-level: `createEdgeType`
-Set on individual handles to specify which edge type to use for preview:
-```vue
-<Handle :createEdgeType="'custom2'" />
+```typescript
+// Connection automatically includes type: 'custom2'
+onConnect(addEdges)
 ```
 
-#### 2. Global: `edgePreviewOnUpdate`
-Set on the VueFlow component to globally enable/disable edge preview during updates:
+### 3. Edge Update Preview
+
+When `edgePreviewOnUpdate` is enabled (default), dragging edge endpoints shows the edge with dynamic coordinates instead of hiding it:
+
 ```vue
 <VueFlow :edgePreviewOnUpdate="true">
-  <!-- your content -->
+  <!-- Edge updates show preview -->
 </VueFlow>
 ```
 
-**Default:** `true` (edge preview enabled)
+## Configuration
 
-When `edgePreviewOnUpdate` is:
-- **`true`** (default): Shows custom edge preview during connection and updates
-- **`false`**: Shows ConnectionLine (original behavior)
+### Handle-Level: `createEdgeType`
 
-This maintains backward compatibility while providing enhanced visual feedback. You can disable the preview globally if you prefer the traditional ConnectionLine behavior, or enable it selectively per-handle by specifying `createEdgeType`.
+Set on individual handles to specify edge type for connections:
+- Type: `string | null`
+- Default: `null`
+
+### Global: `edgePreviewOnUpdate`
+
+Set on VueFlow component to enable/disable edge preview during updates:
+- Type: `boolean`
+- Default: `true`
+
+## Files in this Example
+
+- **EdgesExample.vue** - Main example component
+- **CustomNode.vue** - Node with handles that specify custom edge types
+- **CustomEdge.vue** - Custom edge with delete button
+- **CustomEdge2.vue** - Custom edge with gradient styling
+- **initial-elements.ts** - Initial nodes and edges
+
+## Behavior
+
+| Scenario | Result |
+|----------|--------|
+| Drag from handle with `createEdgeType` | Shows custom edge preview |
+| Drag from handle without `createEdgeType` | Shows default ConnectionLine |
+| Update edge with `edgePreviewOnUpdate=true` | Shows edge with dynamic coordinates |
+| Update edge with `edgePreviewOnUpdate=false` | Shows ConnectionLine |
+
+## Implementation Notes
+
+- The `type` field is automatically added to connections when `createEdgeType` is specified
+- `addEdges()` preserves the type when creating edges from connections
+- Edge preview only works when a valid edge type is registered
+- Falls back to ConnectionLine if edge type is not found
+
 
