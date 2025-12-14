@@ -22,6 +22,7 @@ const ConnectionLine = defineComponent({
       connectionStatus,
       viewport,
       findNode,
+      createEdgeType,
     } = useVueFlow()
 
     const connectionLineComponent = inject(Slots)?.['connection-line']
@@ -46,6 +47,11 @@ const ConnectionLine = defineComponent({
     )
 
     return () => {
+      // Hide ConnectionLine when a custom edge type is being used for preview
+      if (createEdgeType.value) {
+        return null
+      }
+
       if (!fromNode.value || !connectionStartHandle.value) {
         return null
       }
