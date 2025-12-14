@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import type { EdgeProps, Position } from '@vue-flow/core'
+import type {  Position } from '@vue-flow/core'
 import { BezierEdge } from '@vue-flow/core'
 
 interface CustomData {
   text: string
 }
 
-interface CustomEdgeProps extends EdgeProps<CustomData> {
+interface CustomEdgeProps  {
   source: string
   target: string
   sourceHandleId?: string

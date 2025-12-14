@@ -17,12 +17,12 @@ export const initialNodes: Node[] = [
 ]
 
 export const initialEdges: Edge[] = [
-  { id: 'e1-2', source: '1', target: '2', label: 'bezier edge (default)', class: 'normal-edge' },
-  { id: 'e2-2a', source: '2', target: '2a', type: 'smoothstep', label: 'smoothstep edge' },
-  { id: 'e2-3', source: '2', target: '3', type: 'step', label: 'step edge' },
-  { id: 'e3-4', source: '3', target: '4', type: 'straight', label: 'straight edge' },
-  { id: 'e3-3a', source: '3', target: '3a', type: 'straight', label: 'label only edge', style: { stroke: 'none' } },
-  { id: 'e3-5', source: '4', target: '5', animated: true, label: 'animated styled edge', style: { stroke: 'red' } },
+  { id: 'e1-2', source: '1', target: '2', label: 'bezier edge (default)', class: 'normal-edge', updatable: true },
+  { id: 'e2-2a', source: '2', target: '2a', type: 'smoothstep', label: 'smoothstep edge', updatable: true },
+  { id: 'e2-3', source: '2', target: '3', type: 'step', label: 'step edge', updatable: true },
+  { id: 'e3-4', source: '3', target: '4', type: 'straight', label: 'straight edge', updatable: true },
+  { id: 'e3-3a', source: '3', target: '3a', type: 'straight', label: 'label only edge', style: { stroke: 'none' }, updatable: true },
+  { id: 'e3-5', source: '4', target: '5', animated: true, label: 'animated styled edge', style: { stroke: 'red' }, updatable: true },
   {
     id: 'e5-6',
     source: '5',
@@ -32,6 +32,7 @@ export const initialEdges: Edge[] = [
     markerEnd: {
       type: MarkerType.Arrow,
     },
+    updatable: true,
   },
   {
     id: 'e5-7',
@@ -44,6 +45,7 @@ export const initialEdges: Edge[] = [
     markerEnd: {
       type: MarkerType.ArrowClosed,
     },
+    updatable: true,
   },
   {
     id: 'e5-8',
@@ -54,6 +56,7 @@ export const initialEdges: Edge[] = [
     markerEnd: {
       type: MarkerType.ArrowClosed,
     },
+    updatable: "source",
   },
   {
     id: 'e5-9',
@@ -61,5 +64,6 @@ export const initialEdges: Edge[] = [
     target: '9',
     type: 'custom2',
     data: { text: 'custom edge 2' },
+    updatable: true,
   },
 ]

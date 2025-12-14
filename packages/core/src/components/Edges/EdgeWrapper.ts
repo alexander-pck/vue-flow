@@ -193,10 +193,10 @@ const EdgeWrapper = defineComponent({
         const { x: dynamicX, y: dynamicY } = pointToRendererPoint(connectionPosition.value, viewport.value)
 
         // If updating the source, override source coordinates
-        if (edgeUpdaterType.value === 'source') {
+        if (edgeUpdaterType.value === 'target') {
           finalSourceX = dynamicX
           finalSourceY = dynamicY
-        } else if (edgeUpdaterType.value === 'target') {
+        } else if (edgeUpdaterType.value === 'source') {
           // If updating the target, override target coordinates
           finalTargetX = dynamicX
           finalTargetY = dynamicY

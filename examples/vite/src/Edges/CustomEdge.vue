@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import type { EdgeProps, Position } from '@vue-flow/core'
+import type { Position } from '@vue-flow/core'
 import { EdgeLabelRenderer, getBezierPath, useVueFlow } from '@vue-flow/core'
 import type { CSSProperties } from 'vue'
 
-interface CustomEdgeProps<T = any> extends EdgeProps<T> {
+interface CustomEdgeProps<T = any> {
   id: string
   sourceX: number
   sourceY: number
