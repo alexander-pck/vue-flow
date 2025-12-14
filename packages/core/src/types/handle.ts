@@ -52,6 +52,8 @@ export interface HandleProps {
   position?: Position
   /** A valid connection func {@link ValidConnectionFunc} */
   isValidConnection?: ValidConnectionFunc
+  /** Edge type to create when connecting from this handle */
+  createEdgeType?: string 
   /** Enable/disable connecting to handle altogether */
   connectable?: HandleConnectable
   /** Can this handle be used to *start* a connection */

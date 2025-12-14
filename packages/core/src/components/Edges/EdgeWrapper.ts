@@ -46,7 +46,7 @@ const EdgeWrapper = defineComponent({
       connectionPosition,
       connectionEndHandle,
       connectionStartHandle,
-      connectionEdgeType,
+      createEdgeType,
       viewport,
     } = useVueFlow()
 
@@ -120,7 +120,7 @@ const EdgeWrapper = defineComponent({
       edgeUpdaterType,
       onEdgeUpdate,
       onEdgeUpdateEnd,
-      connectionEdgeType: toRef(() => edge.value.type || null),
+      createEdgeType: toRef(() => edge.value.type || null),
     })
 
     return () => {
@@ -179,7 +179,7 @@ const EdgeWrapper = defineComponent({
       // Note: updating.value is instance-specific, so only the edge being dragged will have updating=true
       // We also verify the edge type matches for additional safety and clarity
       const isThisEdgeUpdating =
-        updating.value && connectionEdgeType.value !== null && connectionEdgeType.value === (edge.value.type || 'default')
+        updating.value && createEdgeType.value !== null && createEdgeType.value === (edge.value.type || 'default')
 
       let finalSourceX = sourceX
       let finalSourceY = sourceY
