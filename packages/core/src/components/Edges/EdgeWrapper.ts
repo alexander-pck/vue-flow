@@ -120,7 +120,7 @@ const EdgeWrapper = defineComponent({
       edgeUpdaterType,
       onEdgeUpdate,
       onEdgeUpdateEnd,
-      createEdgeType: toRef(() => edge.value.type || null),
+      createEdgeType: toRef(() => edge.value.type) || null,
     })
 
     return () => {

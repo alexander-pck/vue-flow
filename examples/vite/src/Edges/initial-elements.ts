@@ -14,6 +14,8 @@ export const initialNodes: Node[] = [
   { id: '7', type: 'output', label: 'Output 7', position: { x: 250, y: 550 } },
   { id: '8', type: 'output', label: 'Output 8', position: { x: 525, y: 600 } },
   { id: '9', type: 'output', label: 'Output 9', position: { x: 675, y: 500 } },
+  { id: '10', type: 'selectorNode', label: 'Custom 10', position: { x: 675, y: 450 } },
+
 ]
 
 export const initialEdges: Edge[] = [

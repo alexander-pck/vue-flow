@@ -346,6 +346,7 @@ export function useHandle({
         },
         undefined,
         true,
+        toValue(createEdgeType) ?? null
       )
 
       return

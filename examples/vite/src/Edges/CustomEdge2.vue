@@ -46,5 +46,18 @@ export default {
     :label-bg-style="{ fill: 'red' }"
     :label-bg-padding="[2, 4]"
     :label-bg-border-radius="2"
+    :style="{
+      stroke: 'url(#cool-gradient-' + id + ')',
+      strokeWidth: 4,
+      filter: 'drop-shadow(0 0 6px #00eaff)'
+    }"
   />
+  <svg style="height: 0">
+    <defs>
+      <linearGradient :id="'cool-gradient-' + id" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#00eaff"/>
+        <stop offset="100%" stop-color="#8f00ff"/>
+      </linearGradient>
+    </defs>
+  </svg>
 </template>
