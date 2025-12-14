@@ -288,10 +288,15 @@ export function useHandle({
         }
 
         if ((closestHandle || handleDomNode) && connection && isValid) {
+          // Add createEdgeType to connection if specified
+          const connectionWithType = toValue(createEdgeType)
+            ? { ...connection, type: toValue(createEdgeType) }
+            : connection
+
           if (!onEdgeUpdate) {
-            emits.connect(connection)
+            emits.connect(connectionWithType)
           } else {
-            onEdgeUpdate(event, connection)
+            onEdgeUpdate(event, connectionWithType)
           }
         }
 
@@ -395,7 +400,12 @@ export function useHandle({
     const isOwnHandle = result.connection?.source === result.connection?.target
 
     if (result.isValid && result.connection && !isOwnHandle) {
-      emits.connect(result.connection)
+      // Add createEdgeType to connection if specified
+      const connectionWithType = toValue(createEdgeType)
+        ? { ...result.connection, type: toValue(createEdgeType) }
+        : result.connection
+
+      emits.connect(connectionWithType)
     }
 
     emits.clickConnectEnd(event)
