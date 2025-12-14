@@ -771,6 +771,47 @@ const edges = ref([
 
   The radius at which an edge-updater can be triggered.
 
+### edge-preview-on-update (optional)
+
+- Type: `boolean`
+
+- Default: `true`
+
+- Details:
+
+  Enable edge preview during updates. When enabled, edges being updated will render with dynamic coordinates following the cursor instead of being hidden and replaced by the connection line.
+  
+  Works in conjunction with the `createEdgeType` prop on handles to show custom edge types during connection creation.
+
+- Example:
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { VueFlow } from '@vue-flow/core'
+
+const edgePreviewOnUpdate = ref(true)
+
+const nodes = ref([
+  { id: '1', position: { x: 250, y: 5 } },
+  { id: '2', position: { x: 100, y: 100 } },
+])
+
+const edges = ref([
+  { id: 'e1->2', source: '1', target: '2', updatable: true },
+])
+</script>
+<template>
+  <VueFlow 
+    :nodes="nodes" 
+    :edges="edges" 
+    :edge-preview-on-update="edgePreviewOnUpdate" 
+  />
+</template>
+```
+
+See the [Edge Preview](/examples/edges/edge-preview) example for more details.
+
 ### connect-on-click (optional)
 
 - Type: `boolean`
