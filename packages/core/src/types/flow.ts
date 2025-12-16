@@ -201,8 +201,7 @@ export interface FlowProps {
   selectionMode?: SelectionMode
   edgeUpdaterRadius?: number
   /**
-   * Enable edge preview during updates (renders custom edge type instead of ConnectionLine)
-   * @default true
+   * renders custom edge type instead of ConnectionLine
    */
   keepEdgeTypeDuringUpdate?: boolean
   /** will be renamed to `fitView` */
