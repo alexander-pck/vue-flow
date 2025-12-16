@@ -11,11 +11,12 @@ const ConnectionEdge = defineComponent({
   compatConfig: { MODE: 3 },
   setup() {
     const {
-      id: vueFlowId,
+      id,
       connectionMode,
       connectionStartHandle,
       connectionEndHandle,
       connectionPosition,
+      connectionLineOptions,
       connectionStatus,
       viewport,
       findNode,
@@ -27,15 +28,36 @@ const ConnectionEdge = defineComponent({
     const instance = getCurrentInstance()
 
     const fromNode = computed(() => findNode(connectionStartHandle.value?.nodeId))
+
     const toNode = computed(() => findNode(connectionEndHandle.value?.nodeId) ?? null)
+
+    const toXY = computed(() => {
+      return {
+        x: (connectionPosition.value.x - viewport.value.x) / viewport.value.zoom,
+        y: (connectionPosition.value.y - viewport.value.y) / viewport.value.zoom,
+      }
+    })
+
+    const markerStart = computed(() =>
+      connectionLineOptions.value.markerStart ? `url(#${getMarkerId(connectionLineOptions.value.markerStart, id)})` : '',
+    )
+
+    const markerEnd = computed(() =>
+      connectionLineOptions.value.markerEnd ? `url(#${getMarkerId(connectionLineOptions.value.markerEnd, id)})` : '',
+    )
 
     return () => {
       // Only render when createEdgeType is specified
-      if (!createEdgeType.value || !fromNode.value || !connectionStartHandle.value) {
+      if(!createEdgeType.value) {
+        return null
+      }
+
+      if (!fromNode.value || !connectionStartHandle.value) {
         return null
       }
 
       const startHandleId = connectionStartHandle.value.id
+
       const handleType = connectionStartHandle.value.type
 
       const fromHandleBounds = fromNode.value.handleBounds
@@ -52,15 +74,16 @@ const ConnectionEdge = defineComponent({
 
       const fromHandle = (startHandleId ? handleBounds.find((d) => d.id === startHandleId) : handleBounds[0]) ?? null
       const fromPosition = fromHandle?.position ?? Position.Top
-      const { x: sourceX, y: sourceY } = getHandlePosition(fromNode.value, fromHandle, fromPosition)
+      const { x: fromX, y: fromY } = getHandlePosition(fromNode.value, fromHandle, fromPosition)
 
       let toHandle: HandleElement | null = null
       let targetX: number
       let targetY: number
       let targetPosition: Position
 
+      // When snapped to a handle
       if (toNode.value && connectionEndHandle.value) {
-        // When snapped to a handle
+        // if connection mode is strict, we only look for handles of the opposite type
         if (connectionMode.value === ConnectionMode.Strict) {
           toHandle =
             toNode.value.handleBounds[handleType === 'source' ? 'target' : 'source']?.find(
@@ -72,26 +95,9 @@ const ConnectionEdge = defineComponent({
               (d) => d.id === connectionEndHandle.value?.id,
             ) || null
         }
-
-        if (toHandle) {
-          targetPosition = toHandle.position
-          const targetHandlePosition = getHandlePosition(toNode.value, toHandle, targetPosition)
-          targetX = targetHandlePosition.x
-          targetY = targetHandlePosition.y
-        } else {
-          // Fallback to connection position
-          const { x, y } = pointToRendererPoint(connectionPosition.value, viewport.value)
-          targetX = x
-          targetY = y
-          targetPosition = connectionEndHandle.value?.position ?? oppositePosition[fromPosition]
-        }
-      } else {
-        // Following mouse cursor
-        const { x, y } = pointToRendererPoint(connectionPosition.value, viewport.value)
-        targetX = x
-        targetY = y
-        targetPosition = oppositePosition[fromPosition]
       }
+
+      const toPosition = connectionEndHandle.value?.position ?? (fromPosition ? oppositePosition[fromPosition] : undefined)
 
       // Get the edge component for the specified type
       const edgeTypeName = createEdgeType.value
@@ -127,16 +133,15 @@ const ConnectionEdge = defineComponent({
 
       // Calculate default path for positioning
       const [dAttr] = getBezierPath({
-        sourceX,
-        sourceY,
+        sourceX: fromX,
+        sourceY: fromY,
         sourcePosition: fromPosition,
-        targetX,
-        targetY,
-        targetPosition,
+        targetX: toXY.value.x,
+        targetY: toXY.value.y,
+        targetPosition: toPosition,
       })
 
-      const markerStart = `url('#${getMarkerId(undefined, vueFlowId)}')`
-      const markerEnd = `url('#${getMarkerId(undefined, vueFlowId)}')`
+
 
       return h(
         'svg',
@@ -152,11 +157,11 @@ const ConnectionEdge = defineComponent({
             target: toNode.value?.id ?? '',
             type: edgeTypeName,
             sourcePosition: fromPosition,
-            targetPosition,
-            sourceX,
-            sourceY,
-            targetX,
-            targetY,
+            targetPosition: toPosition,
+            sourceX: fromX,
+            sourceY: fromY,
+            targetX: toXY.value.x,
+            targetY: toXY.value.y,
             sourceHandle: fromHandle,
             targetHandle: toHandle,
             markerStart,
