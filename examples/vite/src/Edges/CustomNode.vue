@@ -1,28 +1,9 @@
 <script lang="ts" setup>
-import type { CSSProperties } from 'vue'
 import { Handle, Position } from '@vue-flow/core'
 
-const handleStyle: CSSProperties = { 
-  background: '#555',
-  width: '8px',
-  height: '8px',
-}
 
-const handleStyleA: CSSProperties = { 
-  ...handleStyle, 
-  top: '25%',
-}
 
-const handleStyleB: CSSProperties = { 
-  ...handleStyle, 
-  top: '75%',
-}
-</script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
 </script>
 
 <template>
@@ -34,17 +15,14 @@ export default {
     <!-- Handles with createEdgeType specified will create edges with that type -->
     <Handle 
       id="a" 
-      type="source" 
-      :position="Position.Right" 
-      :style="handleStyleA" 
-      :createEdgeType="'custom2'"
+      type="target" 
+      :position="Position.Top" 
     />
     <Handle 
       id="b" 
       type="source" 
-      :position="Position.Right" 
-      :style="handleStyleB" 
-      :createEdgeType="'custom2'"
+      :position="Position.Bottom" 
+      createEdgeType="custom"
     />
   </div>
 </template>
@@ -55,7 +33,6 @@ export default {
   border: 2px solid #555;
   border-radius: 5px;
   background: white;
-  min-width: 150px;
 }
 
 .custom-node-body {

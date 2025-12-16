@@ -12,7 +12,7 @@ import { initialEdges, initialNodes } from './initial-elements'
 const edges = ref(initialEdges)
 const nodes = ref(initialNodes)
 
-const { updateEdge, addEdges } = useVueFlow()
+const { updateEdge, addEdges, onConnect } = useVueFlow()
 
 // Handle edge updates (dragging edge endpoints)
 function onEdgeUpdate({ edge, connection }: any) {
@@ -21,7 +21,7 @@ function onEdgeUpdate({ edge, connection }: any) {
 
 // Handle new connections (creating edges by dragging from handles)
 // The connection will include the 'type' field if createEdgeType was specified on the handle
-addEdges.onConnect(addEdges)
+onConnect(addEdges)
 </script>
 
 <template>
@@ -29,7 +29,9 @@ addEdges.onConnect(addEdges)
     v-model:edges="edges"
     v-model:nodes="nodes"
     fit-view-on-init 
+    :nodes-connectable="true"
     :connection-mode="ConnectionMode.Loose"
+    :keepEdgeTypeDuringUpdate="true"
     @edge-update="onEdgeUpdate"
   >
     <!-- Custom node with handles that specify edge types -->
