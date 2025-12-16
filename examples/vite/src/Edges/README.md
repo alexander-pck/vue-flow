@@ -33,10 +33,10 @@ onConnect(addEdges)
 
 ### 3. Edge Update Preview
 
-When `edgePreviewOnUpdate` is enabled (default), dragging edge endpoints shows the edge with dynamic coordinates instead of hiding it:
+When `keepEdgeTypeDuringUpdate` is enabled (default), dragging edge endpoints shows the edge with dynamic coordinates instead of hiding it:
 
 ```vue
-<VueFlow :edgePreviewOnUpdate="true">
+<VueFlow :keepEdgeTypeDuringUpdate="true">
   <!-- Edge updates show preview -->
 </VueFlow>
 ```
@@ -49,7 +49,7 @@ Set on individual handles to specify edge type for connections:
 - Type: `string | null`
 - Default: `null`
 
-### Global: `edgePreviewOnUpdate`
+### Global: `keepEdgeTypeDuringUpdate`
 
 Set on VueFlow component to enable/disable edge preview during updates:
 - Type: `boolean`
@@ -69,8 +69,8 @@ Set on VueFlow component to enable/disable edge preview during updates:
 |----------|--------|
 | Drag from handle with `createEdgeType` | Shows custom edge preview |
 | Drag from handle without `createEdgeType` | Shows default ConnectionLine |
-| Update edge with `edgePreviewOnUpdate=true` | Shows edge with dynamic coordinates |
-| Update edge with `edgePreviewOnUpdate=false` | Shows ConnectionLine |
+| Update edge with `keepEdgeTypeDuringUpdate=true` | Shows edge with dynamic coordinates |
+| Update edge with `keepEdgeTypeDuringUpdate=false` | Shows ConnectionLine |
 
 ## Implementation Notes
 

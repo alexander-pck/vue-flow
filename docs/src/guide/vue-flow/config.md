@@ -790,7 +790,7 @@ const edges = ref([
 import { ref } from 'vue'
 import { VueFlow } from '@vue-flow/core'
 
-const edgePreviewOnUpdate = ref(true)
+const keepEdgeTypeDuringUpdate = ref(true)
 
 const nodes = ref([
   { id: '1', position: { x: 250, y: 5 } },
@@ -805,7 +805,7 @@ const edges = ref([
   <VueFlow 
     :nodes="nodes" 
     :edges="edges" 
-    :edge-preview-on-update="edgePreviewOnUpdate" 
+    :edge-preview-on-update="keepEdgeTypeDuringUpdate" 
   />
 </template>
 ```

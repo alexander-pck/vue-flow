@@ -204,7 +204,7 @@ export interface FlowProps {
    * Enable edge preview during updates (renders custom edge type instead of ConnectionLine)
    * @default true
    */
-  edgePreviewOnUpdate?: boolean
+  keepEdgeTypeDuringUpdate?: boolean
   /** will be renamed to `fitView` */
   fitViewOnInit?: boolean
   /** allow connection with click handlers, i.e. support touch devices */

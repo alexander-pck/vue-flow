@@ -20,10 +20,10 @@ When dragging from this handle, the connection preview will render using your cu
 
 ### Preview During Edge Updates
 
-When `edgePreviewOnUpdate` is enabled (default), dragging edge endpoints shows the edge with dynamic coordinates following your cursor:
+When `keepEdgeTypeDuringUpdate` is enabled (default), dragging edge endpoints shows the edge with dynamic coordinates following your cursor:
 
 ```vue
-<VueFlow :edgePreviewOnUpdate="true">
+<VueFlow :keepEdgeTypeDuringUpdate="true">
   <!-- Edge updates show live preview -->
 </VueFlow>
 ```
@@ -58,13 +58,13 @@ Configure individual handles to specify which edge type to use for connections:
 - **Default:** `null`
 - **Behavior:** When `null`, shows default ConnectionLine
 
-### `edgePreviewOnUpdate` (Global)
+### `keepEdgeTypeDuringUpdate` (Global)
 
 Configure VueFlow to enable/disable edge preview during updates:
 
 ```vue
 <VueFlow 
-  :edgePreviewOnUpdate="true"
+  :keepEdgeTypeDuringUpdate="true"
   v-model:nodes="nodes"
   v-model:edges="edges"
 >
@@ -90,7 +90,7 @@ Configure VueFlow to enable/disable edge preview during updates:
 
 ## Behavior Summary
 
-| Scenario | createEdgeType | edgePreviewOnUpdate | Result |
+| Scenario | createEdgeType | keepEdgeTypeDuringUpdate | Result |
 |----------|---------------|---------------------|---------|
 | Creating connection | Set | N/A | Custom edge preview |
 | Creating connection | null | N/A | ConnectionLine |
@@ -109,5 +109,5 @@ Configure VueFlow to enable/disable edge preview during updates:
 
 This feature is fully backward compatible:
 - Without `createEdgeType`, behavior is unchanged (shows ConnectionLine)
-- `edgePreviewOnUpdate` defaults to `true`, but can be disabled for classic behavior
+- `keepEdgeTypeDuringUpdate` defaults to `true`, but can be disabled for classic behavior
 - Existing code continues to work without modifications

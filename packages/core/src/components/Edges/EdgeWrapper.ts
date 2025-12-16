@@ -46,7 +46,7 @@ const EdgeWrapper = defineComponent({
       connectionPosition,
       createEdgeType,
       viewport,
-      edgePreviewOnUpdate,
+      keepEdgeTypeDuringUpdate,
     } = useVueFlow()
 
     const edge = computed(() => findEdge(props.id)!)
@@ -177,12 +177,9 @@ const EdgeWrapper = defineComponent({
       const { x: targetX, y: targetY } = getHandlePosition(targetNode, targetHandle, targetPosition)
 
       // Check if this edge is being updated and should use dynamic coordinates
-      // Note: updating.value is instance-specific, so only the edge being dragged will have updating=true
-      // We also verify the edge type matches for additional safety and clarity
-      // Only enable preview if edgePreviewOnUpdate is true (default)
       const isThisEdgeUpdating =
         updating.value &&
-        edgePreviewOnUpdate.value &&
+        keepEdgeTypeDuringUpdate.value &&
         createEdgeType.value !== null &&
         createEdgeType.value === (edge.value.type || 'default')
 
@@ -192,20 +189,15 @@ const EdgeWrapper = defineComponent({
       let finalTargetY = targetY
 
       // When updating this edge, use connection position for the appropriate end
-      // Only this edge will enter this block because only this edge has updating=true
       if (isThisEdgeUpdating && connectionPosition.value && !Number.isNaN(connectionPosition.value.x)) {
-        // Transform connection position from viewport to renderer coordinates
+        
         const { x: dynamicX, y: dynamicY } = pointToRendererPoint(connectionPosition.value, viewport.value)
 
-        // handleType indicates which handle we're connecting t
-        // When handleType is 'target', we're reconnecting the SOURCE end to a new target
-        // When handleType is 'source', we're reconnecting the TARGET end to a new source
+        // handleType indicates which handle we're connecting
         if (handleType.value === 'target') {
-          // Reconnecting source end - update source coordinates
           finalSourceX = dynamicX
           finalSourceY = dynamicY
         } else if (handleType.value === 'source') {
-          // Reconnecting target end - update target coordinates
           finalTargetX = dynamicX
           finalTargetY = dynamicY
         }
