@@ -44,8 +44,6 @@ const EdgeWrapper = defineComponent({
       edgesFocusable,
       hooks,
       connectionPosition,
-      connectionEndHandle,
-      connectionStartHandle,
       createEdgeType,
       viewport,
       edgePreviewOnUpdate,
@@ -66,6 +64,8 @@ const EdgeWrapper = defineComponent({
     const nodeId = ref('')
 
     const handleId = ref<string | null>(null)
+
+    const handleType = ref<HandleType>('source')
 
     const edgeUpdaterType = ref<HandleType>('source')
 
@@ -116,7 +116,7 @@ const EdgeWrapper = defineComponent({
     const { handlePointerDown } = useHandle({
       nodeId,
       handleId,
-      type: edgeUpdaterType,
+      type: handleType,
       isValidConnection,
       edgeUpdaterType,
       onEdgeUpdate,
@@ -197,14 +197,14 @@ const EdgeWrapper = defineComponent({
         // Transform connection position from viewport to renderer coordinates
         const { x: dynamicX, y: dynamicY } = pointToRendererPoint(connectionPosition.value, viewport.value)
 
-        // edgeUpdaterType indicates which handle we're connecting TO
-        // When edgeUpdaterType is 'target', we're reconnecting the SOURCE end to a new target
-        // When edgeUpdaterType is 'source', we're reconnecting the TARGET end to a new source
-        if (edgeUpdaterType.value === 'target') {
+        // handleType indicates which handle we're connecting t
+        // When handleType is 'target', we're reconnecting the SOURCE end to a new target
+        // When handleType is 'source', we're reconnecting the TARGET end to a new source
+        if (handleType.value === 'target') {
           // Reconnecting source end - update source coordinates
           finalSourceX = dynamicX
           finalSourceY = dynamicY
-        } else if (edgeUpdaterType.value === 'source') {
+        } else if (handleType.value === 'source') {
           // Reconnecting target end - update target coordinates
           finalTargetX = dynamicX
           finalTargetY = dynamicY
