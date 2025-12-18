@@ -1,7 +1,7 @@
-import { computed, defineComponent, getCurrentInstance, h, inject, resolveComponent } from 'vue'
+import { computed, defineComponent, getCurrentInstance, h, inject, resolveComponent, toValue } from 'vue'
 import type { EdgeComponent, HandleElement } from '../../types'
 import { ConnectionMode, Position } from '../../types'
-import { getHandlePosition, getMarkerId, oppositePosition, pointToRendererPoint } from '../../utils'
+import { getHandlePosition, getMarkerId, oppositePosition } from '../../utils'
 import { useVueFlow } from '../../composables'
 import { Slots } from '../../context'
 import { getBezierPath } from '../Edges/utils'
@@ -22,6 +22,7 @@ const ConnectionEdge = defineComponent({
       findNode,
       createEdgeType,
       getEdgeTypes,
+      keepEdgeTypeDuringUpdate
     } = useVueFlow()
 
     const slots = inject(Slots)
@@ -47,10 +48,12 @@ const ConnectionEdge = defineComponent({
     )
 
     return () => {
-      // Only render when createEdgeType is specified
-      if(!createEdgeType.value) {
+      // Hide ConnectionEdge when updating edge type is not kept
+      if(!keepEdgeTypeDuringUpdate.value) {
         return null
       }
+
+      createEdgeType.value = toValue(createEdgeType.value) ?  toValue(createEdgeType.value) : 'default'
 
       if (!fromNode.value || !connectionStartHandle.value) {
         return null
@@ -77,9 +80,6 @@ const ConnectionEdge = defineComponent({
       const { x: fromX, y: fromY } = getHandlePosition(fromNode.value, fromHandle, fromPosition)
 
       let toHandle: HandleElement | null = null
-      let targetX: number
-      let targetY: number
-      let targetPosition: Position
 
       // When snapped to a handle
       if (toNode.value && connectionEndHandle.value) {

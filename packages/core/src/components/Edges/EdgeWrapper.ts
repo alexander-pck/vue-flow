@@ -65,8 +65,6 @@ const EdgeWrapper = defineComponent({
 
     const handleId = ref<string | null>(null)
 
-    const handleType = ref<HandleType>('source')
-
     const edgeUpdaterType = ref<HandleType>('source')
 
     const edgeEl = ref<SVGElement | null>(null)
@@ -116,7 +114,7 @@ const EdgeWrapper = defineComponent({
     const { handlePointerDown } = useHandle({
       nodeId,
       handleId,
-      type: handleType,
+      type: edgeUpdaterType,
       isValidConnection,
       edgeUpdaterType,
       onEdgeUpdate,
@@ -176,38 +174,11 @@ const EdgeWrapper = defineComponent({
       const { x: sourceX, y: sourceY } = getHandlePosition(sourceNode, sourceHandle, sourcePosition)
       const { x: targetX, y: targetY } = getHandlePosition(targetNode, targetHandle, targetPosition)
 
-      // Check if this edge is being updated and should use dynamic coordinates
-      const isThisEdgeUpdating =
-        updating.value &&
-        keepEdgeTypeDuringUpdate.value &&
-        createEdgeType.value !== null &&
-        createEdgeType.value === (edge.value.type || 'default')
-
-      let finalSourceX = sourceX
-      let finalSourceY = sourceY
-      let finalTargetX = targetX
-      let finalTargetY = targetY
-
-      // When updating this edge, use connection position for the appropriate end
-      if (isThisEdgeUpdating && connectionPosition.value && !Number.isNaN(connectionPosition.value.x)) {
-        
-        const { x: dynamicX, y: dynamicY } = pointToRendererPoint(connectionPosition.value, viewport.value)
-
-        // handleType indicates which handle we're connecting
-        if (handleType.value === 'target') {
-          finalSourceX = dynamicX
-          finalSourceY = dynamicY
-        } else if (handleType.value === 'source') {
-          finalTargetX = dynamicX
-          finalTargetY = dynamicY
-        }
-      }
-
       // todo: let's avoid writing these here (in v2 we want to remove all of these self-managed refs)
-      edge.value.sourceX = finalSourceX
-      edge.value.sourceY = finalSourceY
-      edge.value.targetX = finalTargetX
-      edge.value.targetY = finalTargetY
+      edge.value.sourceX = sourceX
+      edge.value.sourceY = sourceY
+      edge.value.targetX = targetX
+      edge.value.targetY = targetY
 
       return h(
         'g',
@@ -247,7 +218,7 @@ const EdgeWrapper = defineComponent({
         [
           // Only hide edge when updating if no edge type is specified for connection
           // This allows the ConnectionLine to be shown as fallback
-          updating.value && !isThisEdgeUpdating
+          updating.value
             ? null
             : h(edgeCmp.value === false ? getEdgeTypes.value.default : (edgeCmp.value as any), {
                 id: props.id,
@@ -272,10 +243,10 @@ const EdgeWrapper = defineComponent({
                 markerEnd: `url('#${getMarkerId(edge.value.markerEnd, vueFlowId)}')`,
                 sourcePosition,
                 targetPosition,
-                sourceX: finalSourceX,
-                sourceY: finalSourceY,
-                targetX: finalTargetX,
-                targetY: finalTargetY,
+                sourceX,
+                sourceY,
+                targetX,
+                targetY,
                 sourceHandleId: edge.value.sourceHandle,
                 targetHandleId: edge.value.targetHandle,
                 interactionWidth: edge.value.interactionWidth,
@@ -294,8 +265,8 @@ const EdgeWrapper = defineComponent({
                     },
                     h(EdgeAnchor, {
                       'position': sourcePosition,
-                      'centerX': finalSourceX,
-                      'centerY': finalSourceY,
+                      'centerX': sourceX,
+                      'centerY': sourceY,
                       'radius': edgeUpdaterRadius.value,
                       'type': 'source',
                       'data-type': 'source',
@@ -314,8 +285,8 @@ const EdgeWrapper = defineComponent({
                     },
                     h(EdgeAnchor, {
                       'position': targetPosition,
-                      'centerX': finalTargetX,
-                      'centerY': finalTargetY,
+                      'centerX': targetX,
+                      'centerY': targetY,
                       'radius': edgeUpdaterRadius.value,
                       'type': 'target',
                       'data-type': 'target',
@@ -346,6 +317,8 @@ const EdgeWrapper = defineComponent({
     }
 
     function handleEdgeUpdater(event: MouseEvent, isSourceHandle: boolean) {
+      console.log('handling edge updater')
+
       if (event.button !== 0) {
         return
       }
@@ -358,7 +331,6 @@ const EdgeWrapper = defineComponent({
       edgeUpdaterType.value = isSourceHandle ? 'target' : 'source'
 
       emit.updateStart({ event, edge: edge.value })
-
       handlePointerDown(event)
     }
 
@@ -405,6 +377,7 @@ const EdgeWrapper = defineComponent({
     }
 
     function onEdgeUpdaterTargetMouseDown(event: MouseEvent) {
+      console.log('updating target handle')
       handleEdgeUpdater(event, false)
     }
 
