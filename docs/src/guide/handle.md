@@ -132,12 +132,10 @@ import { Handle, Position } from '@vue-flow/core'
   <Handle 
     type="source" 
     :position="Position.Right" 
-    :createEdgeType="'smoothstep'"
+    :createEdgeType="'custom'"
   />
 </template>
 ```
-
-This also enables [edge preview](/examples/edges/edge-preview) functionality, where the custom edge type is shown during connection creation instead of the default connection line.
 
 ```vue
 <script setup>

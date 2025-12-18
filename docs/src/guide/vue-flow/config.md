@@ -771,7 +771,7 @@ const edges = ref([
 
   The radius at which an edge-updater can be triggered.
 
-### edge-preview-on-update (optional)
+### keep-edge-type-during-update (optional)
 
 - Type: `boolean`
 
@@ -779,7 +779,7 @@ const edges = ref([
 
 - Details:
 
-  Enable edge preview during updates. When enabled, edges being updated will render with dynamic coordinates following the cursor instead of being hidden and replaced by the connection line.
+  When updating an existing or new connection, the component displayed during the update is the corresponding Edge component, not the ConnectionLine.
   
   Works in conjunction with the `createEdgeType` prop on handles to show custom edge types during connection creation.
 
@@ -805,7 +805,7 @@ const edges = ref([
   <VueFlow 
     :nodes="nodes" 
     :edges="edges" 
-    :edge-preview-on-update="keepEdgeTypeDuringUpdate" 
+    :keep-edge-type-during-update="keepEdgeTypeDuringUpdate" 
   />
 </template>
 ```
