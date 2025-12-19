@@ -102,9 +102,12 @@ export interface State extends Omit<FlowProps, 'id' | 'modelValue'> {
   connectionRadius: number
   connectionStatus: ConnectionStatus | null
   isValidConnection: ValidConnectionFunc | null
+  edgeTypeOnCreate: string | null
 
   connectOnClick: boolean
   edgeUpdaterRadius: number
+  /** renders custom edge type instead of ConnectionLine */
+  keepEdgeTypeDuringUpdate: boolean
 
   snapToGrid: boolean
   snapGrid: SnapGrid
@@ -302,7 +305,7 @@ export interface Actions extends Omit<ViewportHelper, 'viewportInitialized'> {
   /** force update node internal data, if handle bounds are incorrect, you might want to use this */
   updateNodeInternals: UpdateNodeInternals
   /** start a connection */
-  startConnection: (startHandle: ConnectingHandle, position?: XYPosition, isClick?: boolean) => void
+  startConnection: (startHandle: ConnectingHandle, position?: XYPosition, isClick?: boolean, edgeType?: string | null) => void
   /** update connection position */
   updateConnection: (position: XYPosition, result?: ConnectingHandle | null, status?: ConnectionStatus | null) => void
   /** end (or cancel) a connection */
