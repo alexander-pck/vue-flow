@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { shallowRef, toRef, watch } from 'vue'
+import { ref, toRef, watch } from 'vue'
 import UserSelection from '../../components/UserSelection/UserSelection.vue'
 import NodesSelection from '../../components/NodesSelection/NodesSelection.vue'
 import type { EdgeChange, NodeChange } from '../../types'
@@ -33,16 +33,15 @@ const {
   connectionLookup,
   defaultEdgeOptions,
   connectionStartHandle,
-  panOnDrag,
 } = useVueFlow()
 
-const container = shallowRef<HTMLDivElement | null>(null)
+const container = ref<HTMLDivElement | null>(null)
 
-const selectedNodeIds = shallowRef<Set<string>>(new Set())
+const selectedNodeIds = ref<Set<string>>(new Set())
 
-const selectedEdgeIds = shallowRef<Set<string>>(new Set())
+const selectedEdgeIds = ref<Set<string>>(new Set())
 
-const containerBounds = shallowRef<DOMRect | null>(null)
+const containerBounds = ref<DOMRect>()
 
 const hasActiveSelection = toRef(() => elementsSelectable.value && (isSelecting || userSelectionActive.value))
 
@@ -96,10 +95,8 @@ function onClick(event: MouseEvent) {
 }
 
 function onContextMenu(event: MouseEvent) {
-  if (Array.isArray(panOnDrag.value) && panOnDrag.value?.includes(2)) {
-    event.preventDefault()
-    return
-  }
+  event.preventDefault()
+  event.stopPropagation()
 
   emits.paneContextMenu(event)
 }
@@ -109,7 +106,7 @@ function onWheel(event: WheelEvent) {
 }
 
 function onPointerDown(event: PointerEvent) {
-  containerBounds.value = vueFlowRef.value?.getBoundingClientRect() ?? null
+  containerBounds.value = vueFlowRef.value?.getBoundingClientRect()
 
   if (
     !elementsSelectable.value ||
