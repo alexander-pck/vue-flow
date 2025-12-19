@@ -50,6 +50,7 @@ export function useState(): State {
     paneClickDistance: 0,
     panOnDrag: true,
     edgeUpdaterRadius: 10,
+    keepEdgeTypeDuringUpdate: true,
     onlyRenderVisibleElements: false,
     defaultViewport: { x: 0, y: 0, zoom: 1 },
 
@@ -74,6 +75,7 @@ export function useState(): State {
     connectOnClick: true,
     connectionStatus: null,
     isValidConnection: null,
+    edgeTypeOnCreate: null,
 
     snapGrid: [15, 15],
     snapToGrid: false,
