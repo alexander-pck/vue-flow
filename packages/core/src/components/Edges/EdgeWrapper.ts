@@ -247,7 +247,7 @@ const EdgeWrapper = defineComponent({
               }),
           [
             // Don't show edge updater anchors when the edge is being updated
-            !updating.value && (isUpdatable.value === 'source' || isUpdatable.value === true)
+            isUpdatable.value === 'source' || isUpdatable.value === true
               ? [
                   h(
                     'g',
@@ -267,7 +267,7 @@ const EdgeWrapper = defineComponent({
                   ),
                 ]
               : null,
-            !updating.value && (isUpdatable.value === 'target' || isUpdatable.value === true)
+            isUpdatable.value === 'target' || isUpdatable.value === true
               ? [
                   h(
                     'g',
@@ -322,6 +322,7 @@ const EdgeWrapper = defineComponent({
       edgeUpdaterType.value = isSourceHandle ? 'target' : 'source'
 
       emit.updateStart({ event, edge: edge.value })
+      
       handlePointerDown(event)
     }
 
