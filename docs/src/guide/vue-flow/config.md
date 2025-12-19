@@ -771,6 +771,47 @@ const edges = ref([
 
   The radius at which an edge-updater can be triggered.
 
+### keep-edge-type-during-update (optional)
+
+- Type: `boolean`
+
+- Default: `true`
+
+- Details:
+
+  When updating an existing or new connection, the component displayed during the update is the corresponding Edge component, not the ConnectionLine.
+  
+  Works in conjunction with the `edgeTypeOnCreate` prop on handles to show custom edge types during connection creation.
+
+- Example:
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { VueFlow } from '@vue-flow/core'
+
+const keepEdgeTypeDuringUpdate = ref(true)
+
+const nodes = ref([
+  { id: '1', position: { x: 250, y: 5 } },
+  { id: '2', position: { x: 100, y: 100 } },
+])
+
+const edges = ref([
+  { id: 'e1->2', source: '1', target: '2', updatable: true },
+])
+</script>
+<template>
+  <VueFlow 
+    :nodes="nodes" 
+    :edges="edges" 
+    :keep-edge-type-during-update="keepEdgeTypeDuringUpdate" 
+  />
+</template>
+```
+
+See the [Edge Preview](/examples/edges/edge-preview) example for more details.
+
 ### connect-on-click (optional)
 
 - Type: `boolean`
