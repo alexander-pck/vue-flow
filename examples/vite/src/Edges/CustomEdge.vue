@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import type { Position } from '@vue-flow/core'
+import type { EdgeProps, Position } from '@vue-flow/core'
 import { EdgeLabelRenderer, getBezierPath, useVueFlow } from '@vue-flow/core'
 import type { CSSProperties } from 'vue'
-import { computed } from 'vue'
 
-interface CustomEdgeProps {
+interface CustomEdgeProps<T = any> extends EdgeProps<T> {
   id: string
   sourceX: number
   sourceY: number
@@ -12,7 +11,8 @@ interface CustomEdgeProps {
   targetY: number
   sourcePosition: Position
   targetPosition: Position
-  markerEnd?: string
+  data: T
+  markerEnd: string
   style?: CSSProperties
 }
 
@@ -30,13 +30,7 @@ export default {
 </script>
 
 <template>
-  <path 
-    :id="id" 
-    :style="style" 
-    class="vue-flow__edge-path" 
-    :d="path[0]" 
-    :marker-end="markerEnd" 
-  />
+  <path :id="id" :style="style" class="vue-flow__edge-path" :d="path[0]" :marker-end="markerEnd" />
 
   <EdgeLabelRenderer>
     <div
@@ -47,25 +41,17 @@ export default {
       }"
       class="nodrag nopan"
     >
-      <button class="edge-button" @click="removeEdges(id)">×</button>
+      <button class="edgebutton" @click="removeEdges(id)">×</button>
     </div>
   </EdgeLabelRenderer>
 </template>
 
-<style scoped>
-.edge-button {
-  width: 20px;
-  height: 20px;
-  background: #c90b0b;
-  border: 1px solid #fff;
-  border-radius: 50%;
+<style>
+.edgebutton {
+  border-radius: 999px;
   cursor: pointer;
-  font-size: 12px;
-  line-height: 1;
 }
-
-.edge-button:hover {
-  background: #f05f75;
-  color: white;
+.edgebutton:hover {
+  box-shadow: 0 0 0 2px pink, 0 0 0 4px #f05f75;
 }
 </style>
