@@ -56,7 +56,7 @@ export default {
 .edge-button {
   width: 20px;
   height: 20px;
-  background: #eee;
+  background: #c90b0b;
   border: 1px solid #fff;
   border-radius: 50%;
   cursor: pointer;

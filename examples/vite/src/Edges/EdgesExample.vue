@@ -5,7 +5,6 @@ import { Controls } from '@vue-flow/controls'
 import { ref } from 'vue'
 
 import CustomEdge from './CustomEdge.vue'
-import CustomEdge2 from './CustomEdge2.vue'
 import CustomNode from './CustomNode.vue'
 import { initialEdges, initialNodes } from './initial-elements'
 
@@ -31,7 +30,7 @@ onConnect(addEdges)
     fit-view-on-init 
     :nodes-connectable="true"
     :connection-mode="ConnectionMode.Loose"
-    :keepEdgeTypeDuringUpdate="true"
+    :keepEdgeTypeDuringUpdate="false"
     @edge-update="onEdgeUpdate"
   >
     <!-- Custom node with handles that specify edge types -->
@@ -42,10 +41,6 @@ onConnect(addEdges)
     <!-- Custom edge types -->
     <template #edge-custom="props">
       <CustomEdge v-bind="props" />
-    </template>
-
-    <template #edge-custom2="props">
-      <CustomEdge2 v-bind="props" />
     </template>
 
     <Background />
