@@ -114,6 +114,7 @@ const EdgeWrapper = defineComponent({
       edgeUpdaterType,
       onEdgeUpdate,
       onEdgeUpdateEnd,
+      edgeTypeOnCreate: toRef(() => edge.value.type) || null,
     })
 
     return () => {
@@ -245,6 +246,7 @@ const EdgeWrapper = defineComponent({
                 ...pathOptions,
               }),
           [
+            // Don't show edge updater anchors when the edge is being updated
             isUpdatable.value === 'source' || isUpdatable.value === true
               ? [
                   h(
@@ -320,7 +322,7 @@ const EdgeWrapper = defineComponent({
       edgeUpdaterType.value = isSourceHandle ? 'target' : 'source'
 
       emit.updateStart({ event, edge: edge.value })
-
+      
       handlePointerDown(event)
     }
 
