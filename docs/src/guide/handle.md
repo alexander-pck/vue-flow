@@ -117,9 +117,9 @@ For example, you can set the `top` and `bottom` properties to position the handl
 
 ## Specifying Edge Type for Connections
 
-You can specify which edge type should be used when creating connections from a handle by setting the `createEdgeType` prop.
+You can specify which edge type should be used when creating connections from a handle by setting the `edgeTypeOnCreate` prop.
 
-When a connection is created from a handle with `createEdgeType` specified, the resulting connection object will include a `type` field. 
+When a connection is created from a handle with `edgeTypeOnCreate` specified, the resulting connection object will include a `type` field. 
 This allows `addEdges()` to automatically create edges with the specified type.
 
 ```vue
@@ -132,7 +132,7 @@ import { Handle, Position } from '@vue-flow/core'
   <Handle 
     type="source" 
     :position="Position.Right" 
-    :createEdgeType="'custom'"
+    :edgeTypeOnCreate="'custom'"
   />
 </template>
 ```

@@ -8,7 +8,7 @@ interface Data {
   onChange: (event: InputEvent) => void
 }
 
-interface ColorSelectorNodeProps {
+interface ColorSelectorNodeProps extends Pick<NodeProps<Data, {}, 'selectorNode'>, 'data'> {
   data: Data
 }
 
@@ -36,6 +36,6 @@ export default {
   </div>
 
   <input class="nodrag" type="color" :value="data.color" @input="props.data.onChange" />
-  <Handle id="a" type="source" :position="Position.Right" :style="sourceHandleStyleA" :createEdgeType="'custom2'"/>
-  <Handle id="b" type="source" :position="Position.Right" :style="sourceHandleStyleB" :createEdgeType="'custom2'" />
+  <Handle id="a" type="source" :position="Position.Right" :style="sourceHandleStyleA" />
+  <Handle id="b" type="source" :position="Position.Right" :style="sourceHandleStyleB" />
 </template>

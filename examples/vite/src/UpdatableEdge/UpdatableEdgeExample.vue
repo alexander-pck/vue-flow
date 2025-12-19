@@ -1,12 +1,15 @@
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue'
+import type { Elements, FlowEvents, VueFlowStore } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
-import { VueFlow, useVueFlow } from '@vue-flow/core'
+import { ConnectionMode, VueFlow, useVueFlow } from '@vue-flow/core'
 import CustomEdge from './CustomEdge.vue'
 import CustomNode from './CustomNode.vue'
-const { updateEdge, addEdges } = useVueFlow()
+import { Controls } from '@vue-flow/controls'
 
-const nodes = ref([
+import '@vue-flow/controls/dist/style.css'
+
+const initialElements: Elements = [
   {
     id: '1',
     type: 'input',
@@ -25,48 +28,44 @@ const nodes = ref([
     position: { x: 400, y: 100 },
     style: { background: '#D6D5E6', color: '#333', border: '1px solid #222138', width: 180 },
   },
-])
+  { id: 'e1-2', source: '1', target: '2', label: 'Updatable target', updatable: 'target',type: 'custom' },
+]
 
-const edges = ref([
-  { 
-  id: 'e1-2', 
-  source: '1', 
-  target: '2', 
-  type: 'custom',
-  label: 'Updateable edge', 
-  updatable: true },
-])
+const { updateEdge, addEdges } = useVueFlow()
 
-function onEdgeUpdateStart(edge) {
-  console.log('start update', edge)
+const elements = ref(initialElements)
+
+function onLoad(flowInstance: VueFlowStore) {
+  return flowInstance.fitView()
 }
 
-function onEdgeUpdateEnd(edge) {
-  console.log('end update', edge)
+function onEdgeUpdateStart({ edge }: FlowEvents['edgeUpdateStart']) {
+  return console.log('start update', edge)
 }
 
-function onEdgeUpdate({ edge, connection }) {
-  updateEdge(edge, connection)
+function onEdgeUpdateEnd({ edge }: FlowEvents['edgeUpdateEnd']) {
+  return console.log('end update', edge)
 }
 
-function onConnect(params) {
-  addEdges([params])
+function onEdgeUpdate({ edge, connection }: FlowEvents['edgeUpdate']) {
+  return updateEdge(edge, connection)
 }
 </script>
 
 <template>
   <VueFlow
-    :nodes="nodes"
-    :edges="edges"
+    v-model="elements"
+    :snap-to-grid="true"
     fit-view-on-init
     :nodes-connectable="true"
     :keepEdgeTypeDuringUpdate="true"
+    @pane-ready="onLoad"
     @edge-update="onEdgeUpdate"
-    @connect="onConnect"
     @edge-update-start="onEdgeUpdateStart"
     @edge-update-end="onEdgeUpdateEnd"
+    @connect="addEdges"
   >
-    <Background />
+    <Controls />
 
     <template #edge-custom="customEdgeProps">
       <CustomEdge v-bind="customEdgeProps" />

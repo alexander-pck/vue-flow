@@ -11,7 +11,6 @@ import {
   getEdgeHandle,
   getHandlePosition,
   getMarkerId,
-  pointToRendererPoint,
 } from '../../utils'
 import EdgeAnchor from './EdgeAnchor'
 
@@ -43,10 +42,6 @@ const EdgeWrapper = defineComponent({
       edgesUpdatable,
       edgesFocusable,
       hooks,
-      connectionPosition,
-      createEdgeType,
-      viewport,
-      keepEdgeTypeDuringUpdate,
     } = useVueFlow()
 
     const edge = computed(() => findEdge(props.id)!)
@@ -119,7 +114,7 @@ const EdgeWrapper = defineComponent({
       edgeUpdaterType,
       onEdgeUpdate,
       onEdgeUpdateEnd,
-      createEdgeType: toRef(() => edge.value.type) || null,
+      edgeTypeOnCreate: toRef(() => edge.value.type) || null,
     })
 
     return () => {
@@ -216,8 +211,6 @@ const EdgeWrapper = defineComponent({
           'onKeyDown': isFocusable.value ? onKeyDown : undefined,
         },
         [
-          // Only hide edge when updating if no edge type is specified for connection
-          // This allows the ConnectionLine to be shown as fallback
           updating.value
             ? null
             : h(edgeCmp.value === false ? getEdgeTypes.value.default : (edgeCmp.value as any), {
@@ -317,8 +310,6 @@ const EdgeWrapper = defineComponent({
     }
 
     function handleEdgeUpdater(event: MouseEvent, isSourceHandle: boolean) {
-      console.log('handling edge updater')
-
       if (event.button !== 0) {
         return
       }
@@ -377,7 +368,6 @@ const EdgeWrapper = defineComponent({
     }
 
     function onEdgeUpdaterTargetMouseDown(event: MouseEvent) {
-      console.log('updating target handle')
       handleEdgeUpdater(event, false)
     }
 

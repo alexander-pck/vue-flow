@@ -781,7 +781,7 @@ const edges = ref([
 
   When updating an existing or new connection, the component displayed during the update is the corresponding Edge component, not the ConnectionLine.
   
-  Works in conjunction with the `createEdgeType` prop on handles to show custom edge types during connection creation.
+  Works in conjunction with the `edgeTypeOnCreate` prop on handles to show custom edge types during connection creation.
 
 - Example:
 

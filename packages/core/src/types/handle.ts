@@ -53,7 +53,7 @@ export interface HandleProps {
   /** A valid connection func {@link ValidConnectionFunc} */
   isValidConnection?: ValidConnectionFunc
   /** Edge type to create when connecting from this handle */
-  createEdgeType?: MaybeRefOrGetter<string | null> 
+  edgeTypeOnCreate?: MaybeRefOrGetter<string | null> 
   /** Enable/disable connecting to handle altogether */
   connectable?: HandleConnectable
   /** Can this handle be used to *start* a connection */

@@ -200,9 +200,7 @@ export interface FlowProps {
   preventScrolling?: boolean
   selectionMode?: SelectionMode
   edgeUpdaterRadius?: number
-  /**
-   * renders custom edge type instead of ConnectionLine
-   */
+  /** renders custom edge type instead of ConnectionLine */
   keepEdgeTypeDuringUpdate?: boolean
   /** will be renamed to `fitView` */
   fitViewOnInit?: boolean

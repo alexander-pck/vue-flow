@@ -20,7 +20,7 @@ const ConnectionEdge = defineComponent({
       connectionStatus,
       viewport,
       findNode,
-      createEdgeType,
+      edgeTypeOnCreate,
       getEdgeTypes,
       keepEdgeTypeDuringUpdate
     } = useVueFlow()
@@ -53,7 +53,7 @@ const ConnectionEdge = defineComponent({
         return null
       }
 
-      createEdgeType.value = toValue(createEdgeType.value) ?  toValue(createEdgeType.value) : 'default'
+      edgeTypeOnCreate.value = toValue(edgeTypeOnCreate.value) ?  toValue(edgeTypeOnCreate.value) : 'default'
 
       if (!fromNode.value || !connectionStartHandle.value) {
         return null
@@ -100,7 +100,7 @@ const ConnectionEdge = defineComponent({
       const toPosition = connectionEndHandle.value?.position ?? (fromPosition ? oppositePosition[fromPosition] : undefined)
 
       // Get the edge component for the specified type
-      const edgeTypeName = createEdgeType.value
+      const edgeTypeName = edgeTypeOnCreate.value
       const slot = slots?.[`edge-${edgeTypeName}`]
       
       let edgeComponent: EdgeComponent | false = false

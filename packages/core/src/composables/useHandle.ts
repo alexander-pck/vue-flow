@@ -29,7 +29,7 @@ export interface UseHandleProps {
   edgeUpdaterType?: MaybeRefOrGetter<HandleType>
   onEdgeUpdate?: (event: MouseTouchEvent, connection: Connection) => void
   onEdgeUpdateEnd?: (event: MouseTouchEvent) => void
-  createEdgeType?: string | MaybeRefOrGetter<string | null>
+  edgeTypeOnCreate?: string | MaybeRefOrGetter<string | null>
 }
 
 function alwaysValid() {
@@ -51,7 +51,7 @@ export function useHandle({
   edgeUpdaterType,
   onEdgeUpdate,
   onEdgeUpdateEnd,
-  createEdgeType,
+  edgeTypeOnCreate,
 }: UseHandleProps) {
   const {
     id: flowId,
@@ -160,8 +160,8 @@ export function useHandle({
         toNode: null,
       }
 
-      const createEdgeTypeValue = toValue(createEdgeType)
-      const edgeTypes = createEdgeTypeValue && !!getEdgeTypes.value[createEdgeTypeValue]? createEdgeTypeValue : null
+      const edgeTypeOnCreateValue = toValue(edgeTypeOnCreate)
+      const edgeTypes = edgeTypeOnCreateValue && !!getEdgeTypes.value[edgeTypeOnCreateValue]? edgeTypeOnCreateValue : null
       
       startConnection(
         {
@@ -293,8 +293,8 @@ export function useHandle({
 
         if ((closestHandle || handleDomNode) && connection && isValid) {
 
-          // Add createEdgeType to connection if specified
-          const connectionWithType = toValue(createEdgeType) ? { ...connection, type: toValue(createEdgeType) } : connection
+          // Add edgeTypeOnCreate to connection if specified
+          const connectionWithType = toValue(edgeTypeOnCreate) ? { ...connection, type: toValue(edgeTypeOnCreate) } : connection
 
           if (!onEdgeUpdate) {
             emits.connect(connectionWithType)
@@ -344,9 +344,9 @@ export function useHandle({
     if (!connectionClickStartHandle.value) {
       emits.clickConnectStart({ event, nodeId: toValue(nodeId), handleId: toValue(handleId) })
 
-      // Validate if edge exists before starting connection
-      const createEdgeTypeValue = toValue(createEdgeType)
-      const edgeTypes = createEdgeTypeValue && !!getEdgeTypes.value[createEdgeTypeValue]? createEdgeTypeValue : null
+      // Validate that edge exists before starting connection
+      const edgeTypeOnCreateValue = toValue(edgeTypeOnCreate)
+      const edgeTypes = edgeTypeOnCreateValue && !!getEdgeTypes.value[edgeTypeOnCreateValue]? edgeTypeOnCreateValue : null
       
       startConnection(
         {
@@ -407,9 +407,9 @@ export function useHandle({
     const isOwnHandle = result.connection?.source === result.connection?.target
 
     if (result.isValid && result.connection && !isOwnHandle) {
-      // Add createEdgeType to connection if specified
-      const connectionWithType = toValue(createEdgeType)
-        ? { ...result.connection, type: toValue(createEdgeType) }
+      // Add edgeTypeOnCreate to connection if specified
+      const connectionWithType = toValue(edgeTypeOnCreate)
+        ? { ...result.connection, type: toValue(edgeTypeOnCreate) }
         : result.connection
 
       emits.connect(connectionWithType)

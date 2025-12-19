@@ -27,15 +27,7 @@ const nodes = ref([
   },
 ])
 
-const edges = ref([
-  { 
-  id: 'e1-2', 
-  source: '1', 
-  target: '2', 
-  type: 'custom',
-  label: 'Updateable edge', 
-  updatable: true },
-])
+const edges = ref([{ id: 'e1-2', source: '1', target: '2', label: 'Updateable edge', updatable: true }])
 
 function onEdgeUpdateStart(edge) {
   console.log('start update', edge)

@@ -604,7 +604,7 @@ export function useActions(state: State, nodeLookup: ComputedRef<NodeLookup>, ed
 
     state.connectionEndHandle = null
     state.connectionStatus = null
-    state.createEdgeType = edgeType
+    state.edgeTypeOnCreate = edgeType
 
     if (position) {
       state.connectionPosition = position
@@ -623,7 +623,7 @@ export function useActions(state: State, nodeLookup: ComputedRef<NodeLookup>, ed
     state.connectionPosition = { x: Number.NaN, y: Number.NaN }
     state.connectionEndHandle = null
     state.connectionStatus = null
-    state.createEdgeType = null
+    state.edgeTypeOnCreate = null
 
     if (isClick) {
       state.connectionClickStartHandle = null

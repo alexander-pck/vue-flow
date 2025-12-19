@@ -9,7 +9,7 @@ const props = defineProps(['label'])
   <div class="custom-node">
     <Handle type="target" :position="Position.Top" />
     <div>{{ label }}</div>
-    <Handle type="source" :position="Position.Bottom" createEdgeType="custom" />
+    <Handle type="source" :position="Position.Bottom" edgeTypeOnCreate="custom" />
   </div>
 </template>
 
